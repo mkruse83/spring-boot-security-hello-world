@@ -1,0 +1,27 @@
+### Expect "Hello World" as response.
+GET http://localhost:8080
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### Expect error when calling secure endpoint without credentials.
+GET http://localhost:8080/secure
+
+> {%
+    client.test("Request was not permitted", function () {
+        client.assert(response.status === 401, "Response status is not 401");
+    });
+%}
+
+### Expect "Hello World from secure" as response.
+GET http://localhost:8080/secure
+Authorization: Basic john changeme
+
+> {%
+    client.test("Request executed successfully", function () {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
